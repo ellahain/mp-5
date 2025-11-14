@@ -67,7 +67,7 @@ export default function Home() {
         <p>Alias</p>
         <StyledInput onChange={(e) => setAlias(e.target.value)} value={alias}/>
         <StyledButton onClick={makeUrl}>Shorten URL</StyledButton>
-        {bool?<button onClick={NavigateToURL}>{shortened}</button>:<p>{shortened}</p>}
+        {bool?<button >{shortened}</button>:<p>{shortened}</p>}
     </StyledDiv>
 
 
