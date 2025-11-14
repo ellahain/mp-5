@@ -49,7 +49,7 @@ export default function Home() {
             console.log("invalid alias")
             setBool(false);
         }else {
-            setShortened(`https://cs391-url-shortener.vercel.app/${alias}`)
+            setShortened(`https://mp-5-three-indol.vercel.app/${alias}`)
         }
         console.log(bool)
     }
