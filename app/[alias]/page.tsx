@@ -12,5 +12,4 @@ export default async function AliasPage({params,}: { params: Promise<{ alias: st
         alias: a.alias, url: a.url,
     }));
     console.log(aliases)
-    redirect(`${aliases[1]}`)
 }

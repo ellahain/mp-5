@@ -54,10 +54,6 @@ export default function Home() {
         console.log(bool)
     }
 
-    function NavigateToURL(alias: string){
-        navigate(alias);
-    }
-
 
 
   return (
