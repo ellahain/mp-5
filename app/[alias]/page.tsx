@@ -1,15 +1,29 @@
-import {redirect} from "next/navigation"
+"use client"
+import {redirect, useParams} from "next/navigation"
 import getCollection, {ALIAS_COLLECTION} from "@/db";
 import {AliasProps} from "@/types";
+import getAllAliases from "@/lib/getAllAliases";
+import {useState} from "react";
 
-export default async function AliasPage({params,}: { params: Promise<{ alias: string }>
-}) {
-    const alias = await params
-    const postsCollection = await getCollection(ALIAS_COLLECTION);
-    const data = await postsCollection.find({alias: `${alias}`}).toArray();
-    const aliases: AliasProps[] = data.map((a) => ({
-        id: a._id.toHexString(),
-        alias: a.alias, url: a.url,
-    }));
-    console.log(aliases)
+
+
+
+export default function AliasPage() {
+    const alias = useParams()
+    const [value, setValue] = useState<AliasProps>({id: "", alias: "", url: ""} as AliasProps)
+
+    async function getURL() {
+        const aliasCollection = await getAllAliases()
+        for (let i = 0; i<aliasCollection.length; i++){
+            if (aliasCollection[i]===alias){
+                setValue(aliasCollection[i])
+            }
+        }
+    }
+
+    const info = getURL();
+
+    redirect(`${value.url}`)
+
+
 }
