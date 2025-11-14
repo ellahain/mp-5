@@ -35,6 +35,10 @@ const StyledButton = styled.button`
     }
 `
 
+const StyledError = styled.p`
+    color: red;
+`
+
 const StyledLink = styled(Link)`
     text-decoration: underline;
 `
@@ -44,13 +48,16 @@ export default function Home() {
     const [url, setUrl] = useState("");
     const [alias, setAlias] = useState("");
     const [shortened, setShortened] = useState("");
+    const [isLink, setIsLink] = useState(true);
 
     async function makeUrl(){
         const boolean = await createNewAlias(alias, url);
         if (!checkLink(url)){
             setShortened("Invalid URL")
+            setIsLink(false);
         } else if (!boolean){
             setShortened("Invalid Alias");
+            setIsLink(false);
         } else {
             setShortened(`https://mp-5-three-indol.vercel.app/${alias}`)
         }
@@ -66,7 +73,7 @@ export default function Home() {
         <StyledInput onChange={(e) => setAlias(e.target.value)} value={alias}/>
         <StyledButton onClick={makeUrl}>Shorten URL</StyledButton>
         <p>Your Shortened URL</p>
-        {<StyledLink href={shortened} target="_blank">{shortened}</StyledLink>}
+        {isLink?<StyledLink href={shortened} target="_blank">{shortened}</StyledLink>:<StyledError>{shortened}</StyledError>}
     </StyledDiv>
   );
 }
