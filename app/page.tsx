@@ -44,7 +44,7 @@ export default function Home() {
             setShortened("Invalid Alias");
             setBool(false);
         }else {
-            setShortened(`mp-5-three-indol.vercel.app${alias}`)
+            setShortened(`https://mp-5-three-indol.vercel.app/${alias}`)
         }
     }
 
