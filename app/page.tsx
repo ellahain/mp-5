@@ -3,7 +3,6 @@ import styled from "styled-components";
 import {useState} from "react";
 import checkLink from "@/lib/checkLink";
 import createNewAlias from "@/lib/createNewAlias";
-import {navigate} from "@/lib/actions"
 
 const StyledInput = styled.input`
     border: 1px #ccc solid;
@@ -37,21 +36,16 @@ export default function Home() {
     const [bool, setBool] = useState(true);
 
     async function makeUrl(){
-        console.log(url);
-        console.log(alias);
         const boolean = await createNewAlias(alias, url);
         if (!checkLink(url)){
             setShortened("Invalid URL")
-            console.log("invalid url")
             setBool(false);
         } else if (!boolean){
             setShortened("Invalid Alias");
-            console.log("invalid alias")
             setBool(false);
         }else {
-            setShortened(`https://mp-5-three-indol.vercel.app/${alias}`)
+            setShortened(`mp-5-three-indol.vercel.app${alias}`)
         }
-        console.log(bool)
     }
 
 
@@ -63,9 +57,7 @@ export default function Home() {
         <p>Alias</p>
         <StyledInput onChange={(e) => setAlias(e.target.value)} value={alias}/>
         <StyledButton onClick={makeUrl}>Shorten URL</StyledButton>
-        {bool?<button >{shortened}</button>:<p>{shortened}</p>}
+        {bool?<button>{shortened}</button>:<p>{shortened}</p>}
     </StyledDiv>
-
-
   );
 }
