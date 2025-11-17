@@ -103,7 +103,8 @@ export default function Home() {
             setShortened("Invalid Alias");
             setIsLink(false);
         } else {
-            setShortened(`https://mp-5-three-indol.vercel.app/${alias}`)
+            setShortened(`https://mp-5-three-indol.vercel.app/${alias}`);
+            setIsLink(true);
         }
     }
 
