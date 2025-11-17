@@ -1,18 +1,14 @@
 import {redirect, RedirectType} from "next/navigation"
-import getAllAliases from "@/lib/getAllAliases";
+import getCollection, {ALIAS_COLLECTION} from "@/db";
 
 
 export default async function AliasPage({params,}: {params: Promise<{alias: string} >}) {
-    const alias = await params
-    const aliasCollection = await getAllAliases()
-    let doc = {id: "", alias: "", url: ""};
+    const {alias} = await params;
+    const collection = await getCollection(ALIAS_COLLECTION);
+    const doc = await collection.findOne({alias: alias});
 
-    for (let i = 0; i<aliasCollection.length; i++){
-        if (aliasCollection[i].alias===alias.alias){
-            doc = aliasCollection[i]
-            break;
-        }
+    if (!doc) {
+        redirect("404");
     }
-
     redirect(`${doc.url}`, RedirectType.replace)
 }

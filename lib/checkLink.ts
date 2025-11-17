@@ -8,6 +8,10 @@ export default function checkLink(url: string){
         } catch (error) {
             valid = false;
         }
+
+        if (url===""){
+            valid = false;
+        }
         const regex = /https?:\/\/(.+)/;
         valid = regex.test(url);
 

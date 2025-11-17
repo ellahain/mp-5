@@ -1,9 +1,8 @@
 "use server"
 
 import getCollection, {ALIAS_COLLECTION} from "@/db";
-import getAllAliases from "@/lib/getAllAliases";
 import checkLink from "./checkLink";
-import {AliasProps} from "@/types";
+
 
 export default async function createNewAlias(alias: string, url: string): Promise<boolean> {
     console.log("createNewAlias");
@@ -12,22 +11,11 @@ export default async function createNewAlias(alias: string, url: string): Promis
         url: url,
     }
 
-    function checkDuplicates(aliasArray: AliasProps[], a: string) {
-        for (let i = 0; i < aliasArray.length; i++) {
-            if (aliasArray[i].alias === a) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    const aliasCollection = await getAllAliases();
-
-    if (!checkDuplicates(aliasCollection, a.alias) || !checkLink(url)) {
+    const aliasCollection = await getCollection(ALIAS_COLLECTION);
+    if (await aliasCollection.find({alias: `${a.alias}`}).hasNext() || !checkLink(url) || alias==="") {
         return false;
     } else {
-        const aliasesCollection = await getCollection(ALIAS_COLLECTION);
-        const res = await aliasesCollection.insertOne({...a});
+        const res = await aliasCollection.insertOne({...a});
 
         if (!res.acknowledged) {
             throw new Error("DB insert failed");
