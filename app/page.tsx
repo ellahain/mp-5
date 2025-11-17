@@ -5,31 +5,61 @@ import checkLink from "@/lib/checkLink";
 import createNewAlias from "@/lib/createNewAlias";
 import Link from "next/link";
 
-const StyledInput = styled.input`
+
+const StyledBackground = styled.div`
+    background-color: pink;
+    width: 100vw;
+    height: 100vh;
+    padding: 8% 0;
+    text-align: center;
+    
+    h1 {
+        font-size: calc(10px + 2vw);
+        font-weight: bold;
+    }
+`
+const StyledURL = styled.input`
     border: 1px #ccc solid;
     border-radius: 5px;
     width: 100%;
     padding: 5px;
+    margin-bottom: 20px;
+`
+
+const StyledAlias = styled.input`
+    border: 1px #ccc solid;
+    border-radius: 5px;
+    width: 20%;
+    padding: 5px;
+    display: inline;
 `
 
 const StyledDiv = styled.div`
-    margin: 10% auto;
+    margin: 0 auto;
+    text-align: left;
     padding: 80px;
     border-radius: 10px;
     border: 1px #ccc solid;
-    width: 40%;
+    width: 80%;
+    height: auto;
+    background-color: white;
+    
+    h3 {
+        font-size: calc(5px + 1vw);
+        font-weight: bold;
+    }
 `
 /*Learned to do hover features from: https://styled-components.com/docs/basics*/
 const StyledButton = styled.button`
-    background-color: yellowgreen;
+    background-color: mediumpurple;
     color: white;
     border-radius: 10px;
     display: block;
     width: 100%;
     margin: 5% auto;
     padding: 5px;
-    
-    &:hover{
+
+    &:hover {
         cursor: pointer;
         background-color: black;
     }
@@ -43,6 +73,12 @@ const StyledLink = styled(Link)`
     text-decoration: underline;
 `
 
+const StyledResult = styled.div`
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 3%;
+`
+
 export default function Home() {
 
     const [url, setUrl] = useState("");
@@ -50,12 +86,20 @@ export default function Home() {
     const [shortened, setShortened] = useState("");
     const [isLink, setIsLink] = useState(true);
 
-    async function makeUrl(){
+    async function makeUrl() {
+        /*Check validity of alias using encodeURIComponent as mentioned on Piazza, return early if fail so the rest of the function doesn't run*/
+        if (encodeURIComponent(alias) !== alias) {
+            setShortened("Invalid alias: you can only use URL characters");
+            setIsLink(false);
+            return;
+        }
+
+        /*Alias uses valid characters*/
         const boolean = await createNewAlias(alias, url);
-        if (!checkLink(url)){
+        if (!checkLink(url)) {
             setShortened("Invalid URL")
             setIsLink(false);
-        } else if (!boolean){
+        } else if (!boolean) {
             setShortened("Invalid Alias");
             setIsLink(false);
         } else {
@@ -64,16 +108,22 @@ export default function Home() {
     }
 
 
-
-  return (
-    <StyledDiv>
-        <p>URL</p>
-        <StyledInput onChange={(e) => setUrl(e.target.value)} value={url}/>
-        <p>Alias</p>
-        <StyledInput onChange={(e) => setAlias(e.target.value)} value={alias}/>
-        <StyledButton onClick={makeUrl}>Shorten URL</StyledButton>
-        <p>Your Shortened URL</p>
-        {isLink?<StyledLink href={shortened} target="_blank">{shortened}</StyledLink>:<StyledError>{shortened}</StyledError>}
-    </StyledDiv>
-  );
+    return (
+        <StyledBackground>
+            <h1>CS391 URL Shortener</h1>
+            <StyledDiv>
+                <h3>URL</h3>
+                <StyledURL onChange={(e) => setUrl(e.target.value)} value={url}/>
+                <h3>Alias</h3>
+                <span> https://mp-5-three-indol.vercel.app/</span>
+                <StyledAlias onChange={(e) => setAlias(e.target.value)} value={alias}/>
+                <StyledButton onClick={makeUrl}>Shorten URL</StyledButton>
+                <StyledResult>
+                    <p>Your Shortened URL:</p>
+                {isLink ? <StyledLink href={shortened} target="_blank">{shortened}</StyledLink> :
+                    <StyledError>{shortened}</StyledError>}
+                    </StyledResult>
+            </StyledDiv>
+        </StyledBackground>
+    );
 }
