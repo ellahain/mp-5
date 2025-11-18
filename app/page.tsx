@@ -100,7 +100,7 @@ export default function Home() {
             setShortened("Invalid URL")
             setIsLink(false);
         } else if (!boolean) {
-            setShortened("Invalid Alias");
+            setShortened("Invalid Alias: Alias is already in use or empty");
             setIsLink(false);
         } else {
             setShortened(`https://mp-5-three-indol.vercel.app/${alias}`);
