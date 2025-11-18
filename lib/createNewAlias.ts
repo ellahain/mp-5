@@ -12,6 +12,7 @@ export default async function createNewAlias(alias: string, url: string): Promis
     }
 
     const aliasCollection = await getCollection(ALIAS_COLLECTION);
+    /*learned about .hasNext() from documentation: https://www.mongodb.com/docs/manual/tutorial/iterate-a-cursor/#std-label-read-operations-cursors*/
     if (await aliasCollection.find({alias: `${a.alias}`}).hasNext() || !checkLink(url) || alias==="") {
         return false;
     } else {
