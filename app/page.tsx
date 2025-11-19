@@ -4,6 +4,7 @@ import {useState} from "react";
 import checkLink from "@/lib/checkLink";
 import createNewAlias from "@/lib/createNewAlias";
 import Link from "next/link";
+import Image from "next/image";
 
 
 const StyledBackground = styled.div`
@@ -65,6 +66,13 @@ const StyledButton = styled.button`
     }
 `
 
+const CopyButton = styled.button`
+    &:hover {
+        cursor: pointer;
+        box-shadow: 2px 2px 2px 2px darkgrey;
+    }
+`
+
 const StyledError = styled.p`
     color: red;
 `
@@ -84,7 +92,9 @@ export default function Home() {
     const [url, setUrl] = useState("");
     const [alias, setAlias] = useState("");
     const [shortened, setShortened] = useState("");
-    const [isLink, setIsLink] = useState(true);
+    const [isLink, setIsLink] = useState(false);
+
+
 
     async function makeUrl() {
         /*Check validity of alias using encodeURIComponent as mentioned on Piazza, return early if fail so the rest of the function doesn't run*/
@@ -108,6 +118,13 @@ export default function Home() {
         }
     }
 
+    /*Learned to do navigator.clipboard.writeText() from https://www.w3schools.com/howto/howto_js_copy_clipboard.asp*/
+    /*Learn to do window.confirm from https://www.w3schools.com/js/js_popup.asp*/
+    function copy(){
+        navigator.clipboard.writeText(shortened);
+        window.confirm("Copied!");
+    }
+
 
     return (
         <StyledBackground>
@@ -121,7 +138,7 @@ export default function Home() {
                 <StyledButton onClick={makeUrl}>Shorten URL</StyledButton>
                 <StyledResult>
                     <p>Your Shortened URL:</p>
-                {isLink ? <StyledLink href={shortened} target="_blank">{shortened}</StyledLink> :
+                    {isLink ? (<span><StyledLink href={shortened} target="_blank">{shortened}</StyledLink> <CopyButton onClick={copy}><Image src='/copy.png' alt="copy button" width={20} height={20}/></CopyButton></span>):
                     <StyledError>{shortened}</StyledError>}
                     </StyledResult>
             </StyledDiv>
